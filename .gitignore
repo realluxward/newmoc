@@ -1,0 +1,16 @@
+# 忽略日志文件
+*.log
+
+fxtemp/
+dataset/**/*cold*
+data/
+/FuxiCTR/data
+/FuxiCTR/model_zoo/**/data/
+/FuxiCTR/model_zoo/**/checkpoints/
+/vq/script/moe/moe_run_*.py
+/vq/script/rq/
+/vq/script/sports/
+/vq/script/bole_data/
+/vq/script/beauty/
+*.tar.gz
+cluster/
