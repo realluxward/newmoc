@@ -16,3 +16,4 @@ data/
 cluster/
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
+amazon*/

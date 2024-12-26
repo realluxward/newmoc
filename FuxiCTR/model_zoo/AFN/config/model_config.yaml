@@ -1,0 +1,280 @@
+toys-split-default: &default
+    afn_activations: relu
+    afn_dropout: 0.1
+    afn_hidden_units: [128]
+    batch_norm: true
+    batch_size: 8192
+    data_block_size: -1
+    debug: false
+    dnn_activations: relu
+    dnn_dropout: 0.1
+    dnn_hidden_units: [512, 256, 128]
+    embedding_dim: 64
+    embedding_regularizer: 0
+    ensemble_dnn: true
+    epochs: 100
+    every_x_epochs: 1
+    learning_rate: 0.001
+    logarithmic_neurons: 128
+    loss: binary_crossentropy
+    metrics: [AUC, logloss]
+    model: AFN
+    model_id: AFN_base
+    model_root: ./checkpints/run/
+    monitor: AUC
+    monitor_mode: max
+    net_regularizer: 0
+    num_workers: 16
+    optimizer: adam
+    patience: 1
+    pickle_feature_encoder: true
+    save_best_only: true
+    seed: 2024
+    shuffle: true
+    task: binary_classification
+    use_hdf5: true
+    verbose: 1
+  
+toys-split-ui:
+    <<: *default
+    dataset_id: toys-split-ui
+  
+toys-split:
+    <<: *default
+    dataset_id: toys-split 
+
+# moe
+toys-split-moe-1:
+    <<: *default
+    dataset_id: toys-split-moe-1
+
+toys-split-moe-2:
+    <<: *default
+    dataset_id: toys-split-moe-2
+
+toys-split-moe-3:
+    <<: *default
+    dataset_id: toys-split-moe-3
+
+toys-split-moe-4:
+    <<: *default
+    dataset_id: toys-split-moe-4
+
+toys-split-moe-5:
+    <<: *default
+    dataset_id: toys-split-moe-5
+
+toys-split-moe-6:
+    <<: *default
+    dataset_id: toys-split-moe-6
+
+toys-split-moe-7:
+    <<: *default
+    dataset_id: toys-split-moe-7
+
+# noise
+toys-split-moe-1-noise:
+    <<: *default
+    dataset_id: toys-split-moe-1-noise
+
+toys-split-moe-2-noise:
+    <<: *default
+    dataset_id: toys-split-moe-2-noise
+
+toys-split-moe-3-noise:
+    <<: *default
+    dataset_id: toys-split-moe-3-noise
+
+toys-split-moe-4-noise:
+    <<: *default
+    dataset_id: toys-split-moe-4-noise
+
+toys-split-moe-5-noise:
+    <<: *default
+    dataset_id: toys-split-moe-5-noise
+
+toys-split-moe-6-noise:
+    <<: *default
+    dataset_id: toys-split-moe-6-noise
+
+toys-split-moe-7-noise:
+    <<: *default
+    dataset_id: toys-split-moe-7-noise
+
+
+# rq
+toys-split-rq-1:
+    <<: *default
+    dataset_id: toys-split-rq-1
+
+toys-split-rq-2:
+    <<: *default
+    dataset_id: toys-split-rq-2
+
+toys-split-rq-3:
+    <<: *default
+    dataset_id: toys-split-rq-3
+
+toys-split-rq-4:
+    <<: *default
+    dataset_id: toys-split-rq-4
+
+toys-split-rq-5:
+    <<: *default
+    dataset_id: toys-split-rq-5
+
+toys-split-rq-6:
+    <<: *default
+    dataset_id: toys-split-rq-6
+
+toys-split-rq-7:
+    <<: *default
+    dataset_id: toys-split-rq-7
+
+
+# seq
+toys-split-rq-1-seq:
+    <<: *default
+    dataset_id: toys-split-rq-1-seq
+
+toys-split-rq-2-seq:
+    <<: *default
+    dataset_id: toys-split-rq-2-seq
+
+toys-split-rq-3-seq:
+    <<: *default
+    dataset_id: toys-split-rq-3-seq
+
+toys-split-rq-4-seq:
+    <<: *default
+    dataset_id: toys-split-rq-4-seq
+
+toys-split-rq-5-seq:
+    <<: *default
+    dataset_id: toys-split-rq-5-seq
+
+toys-split-rq-6-seq:
+    <<: *default
+    dataset_id: toys-split-rq-6-seq
+
+toys-split-rq-7-seq:
+    <<: *default
+    dataset_id: toys-split-rq-7-seq
+
+# uni
+toys-split-rq-1-uni:
+    <<: *default
+    dataset_id: toys-split-rq-1-uni
+
+toys-split-rq-2-uni:
+    <<: *default
+    dataset_id: toys-split-rq-2-uni
+
+toys-split-rq-3-uni:
+    <<: *default
+    dataset_id: toys-split-rq-3-uni
+
+toys-split-rq-4-uni:
+    <<: *default
+    dataset_id: toys-split-rq-4-uni
+
+toys-split-rq-5-uni:
+    <<: *default
+    dataset_id: toys-split-rq-5-uni
+
+toys-split-rq-6-uni:
+    <<: *default
+    dataset_id: toys-split-rq-6-uni
+
+toys-split-rq-7-uni:
+    <<: *default
+    dataset_id: toys-split-rq-7-uni
+
+
+# moe-seq
+toys-split-moe-1-seq:
+    <<: *default
+    dataset_id: toys-split-moe-1-seq
+
+toys-split-moe-2-seq:
+    <<: *default
+    dataset_id: toys-split-moe-2-seq
+
+toys-split-moe-3-seq:
+    <<: *default
+    dataset_id: toys-split-moe-3-seq
+
+toys-split-moe-4-seq:
+    <<: *default
+    dataset_id: toys-split-moe-4-seq
+
+toys-split-moe-5-seq:
+    <<: *default
+    dataset_id: toys-split-moe-5-seq
+
+toys-split-moe-6-seq:
+    <<: *default
+    dataset_id: toys-split-moe-6-seq
+
+toys-split-moe-7-seq:
+    <<: *default
+    dataset_id: toys-split-moe-7-seq
+
+
+# moe-uni
+toys-split-moe-1-uni:
+    <<: *default
+    dataset_id: toys-split-moe-1-uni
+
+toys-split-moe-2-uni:
+    <<: *default
+    dataset_id: toys-split-moe-2-uni
+
+toys-split-moe-3-uni:
+    <<: *default
+    dataset_id: toys-split-moe-3-uni
+
+toys-split-moe-4-uni:
+    <<: *default
+    dataset_id: toys-split-moe-4-uni
+
+toys-split-moe-5-uni:
+    <<: *default
+    dataset_id: toys-split-moe-5-uni
+
+toys-split-moe-6-uni:
+    <<: *default
+    dataset_id: toys-split-moe-6-uni
+
+toys-split-moe-7-uni:
+    <<: *default
+    dataset_id: toys-split-moe-7-uni
+
+# me
+toys-split-me-1:
+    <<: *default
+    dataset_id: toys-split-me-1
+
+toys-split-me-2:
+    <<: *default
+    dataset_id: toys-split-me-2
+
+toys-split-me-3:
+    <<: *default
+    dataset_id: toys-split-me-3
+
+toys-split-me-4:
+    <<: *default
+    dataset_id: toys-split-me-4
+
+toys-split-me-5:
+    <<: *default
+    dataset_id: toys-split-me-5
+
+toys-split-me-6:
+    <<: *default
+    dataset_id: toys-split-me-6
+
+toys-split-me-7:
+    <<: *default
+    dataset_id: toys-split-me-7

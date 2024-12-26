@@ -1,0 +1,284 @@
+beauty-split-default: &default
+    early_stop_patience: 1
+    batch_norm: true
+    batch_size: 8192
+    # batch_size: 1024
+    debug_mode: false
+    dnn_activations: relu
+    embedding_dim: 64
+    embedding_regularizer: 0
+    epochs: 100
+    eval_interval: 1
+    # learning_rate: 0.00001
+    learning_rate: 0.001
+    loss: binary_crossentropy
+    low_rank: 128
+    metrics: [AUC, logloss]
+    model: DCNv2
+    model_id: DCNv2_base
+    model_root: ./checkpoints/run/
+    model_structure: parallel
+    monitor: {AUC: 1}
+    monitor_mode: max
+    net_dropout: 0.2
+    net_regularizer: 0
+    num_cross_layers: 3
+    # num_cross_layers: 2
+    num_experts: 2
+    num_workers: 16
+    optimizer: adam
+    # parallel_dnn_hidden_units: [256, 256]
+    # parallel_dnn_hidden_units: [512, 256, 128, 64]
+    parallel_dnn_hidden_units: [512, 256, 128]
+    pickle_feature_encoder: true
+    save_best_only: true
+    seed: 2333
+    shuffle: true
+    stacked_dnn_hidden_units: [500, 500, 500]
+    task: binary_classification
+    use_low_rank_mixture: false
+    verbose: 1
+  
+beauty-split-ui:
+    <<: *default
+    dataset_id: beauty-split-ui
+  
+beauty-split:
+    <<: *default
+    dataset_id: beauty-split 
+
+# moe
+beauty-split-moe-1:
+    <<: *default
+    dataset_id: beauty-split-moe-1
+
+beauty-split-moe-2:
+    <<: *default
+    dataset_id: beauty-split-moe-2
+
+beauty-split-moe-3:
+    <<: *default
+    dataset_id: beauty-split-moe-3
+
+beauty-split-moe-4:
+    <<: *default
+    dataset_id: beauty-split-moe-4
+
+beauty-split-moe-5:
+    <<: *default
+    dataset_id: beauty-split-moe-5
+
+beauty-split-moe-6:
+    <<: *default
+    dataset_id: beauty-split-moe-6
+
+beauty-split-moe-7:
+    <<: *default
+    dataset_id: beauty-split-moe-7
+
+# noise
+beauty-split-moe-1-noise:
+    <<: *default
+    dataset_id: beauty-split-moe-1-noise
+
+beauty-split-moe-2-noise:
+    <<: *default
+    dataset_id: beauty-split-moe-2-noise
+
+beauty-split-moe-3-noise:
+    <<: *default
+    dataset_id: beauty-split-moe-3-noise
+
+beauty-split-moe-4-noise:
+    <<: *default
+    dataset_id: beauty-split-moe-4-noise
+
+beauty-split-moe-5-noise:
+    <<: *default
+    dataset_id: beauty-split-moe-5-noise
+
+beauty-split-moe-6-noise:
+    <<: *default
+    dataset_id: beauty-split-moe-6-noise
+
+beauty-split-moe-7-noise:
+    <<: *default
+    dataset_id: beauty-split-moe-7-noise
+
+
+# rq
+beauty-split-rq-1:
+    <<: *default
+    dataset_id: beauty-split-rq-1
+
+beauty-split-rq-2:
+    <<: *default
+    dataset_id: beauty-split-rq-2
+
+beauty-split-rq-3:
+    <<: *default
+    dataset_id: beauty-split-rq-3
+
+beauty-split-rq-4:
+    <<: *default
+    dataset_id: beauty-split-rq-4
+
+beauty-split-rq-5:
+    <<: *default
+    dataset_id: beauty-split-rq-5
+
+beauty-split-rq-6:
+    <<: *default
+    dataset_id: beauty-split-rq-6
+
+beauty-split-rq-7:
+    <<: *default
+    dataset_id: beauty-split-rq-7
+
+
+# seq
+beauty-split-rq-1-seq:
+    <<: *default
+    dataset_id: beauty-split-rq-1-seq
+
+beauty-split-rq-2-seq:
+    <<: *default
+    dataset_id: beauty-split-rq-2-seq
+
+beauty-split-rq-3-seq:
+    <<: *default
+    dataset_id: beauty-split-rq-3-seq
+
+beauty-split-rq-4-seq:
+    <<: *default
+    dataset_id: beauty-split-rq-4-seq
+
+beauty-split-rq-5-seq:
+    <<: *default
+    dataset_id: beauty-split-rq-5-seq
+
+beauty-split-rq-6-seq:
+    <<: *default
+    dataset_id: beauty-split-rq-6-seq
+
+beauty-split-rq-7-seq:
+    <<: *default
+    dataset_id: beauty-split-rq-7-seq
+
+# uni
+beauty-split-rq-1-uni:
+    <<: *default
+    dataset_id: beauty-split-rq-1-uni
+
+beauty-split-rq-2-uni:
+    <<: *default
+    dataset_id: beauty-split-rq-2-uni
+
+beauty-split-rq-3-uni:
+    <<: *default
+    dataset_id: beauty-split-rq-3-uni
+
+beauty-split-rq-4-uni:
+    <<: *default
+    dataset_id: beauty-split-rq-4-uni
+
+beauty-split-rq-5-uni:
+    <<: *default
+    dataset_id: beauty-split-rq-5-uni
+
+beauty-split-rq-6-uni:
+    <<: *default
+    dataset_id: beauty-split-rq-6-uni
+
+beauty-split-rq-7-uni:
+    <<: *default
+    dataset_id: beauty-split-rq-7-uni
+
+
+# moe-seq
+beauty-split-moe-1-seq:
+    <<: *default
+    dataset_id: beauty-split-moe-1-seq
+
+beauty-split-moe-2-seq:
+    <<: *default
+    dataset_id: beauty-split-moe-2-seq
+
+beauty-split-moe-3-seq:
+    <<: *default
+    dataset_id: beauty-split-moe-3-seq
+
+beauty-split-moe-4-seq:
+    <<: *default
+    dataset_id: beauty-split-moe-4-seq
+
+beauty-split-moe-5-seq:
+    <<: *default
+    dataset_id: beauty-split-moe-5-seq
+
+beauty-split-moe-6-seq:
+    <<: *default
+    dataset_id: beauty-split-moe-6-seq
+
+beauty-split-moe-7-seq:
+    <<: *default
+    dataset_id: beauty-split-moe-7-seq
+
+
+# moe-uni
+beauty-split-moe-1-uni:
+    <<: *default
+    dataset_id: beauty-split-moe-1-uni
+
+beauty-split-moe-2-uni:
+    <<: *default
+    dataset_id: beauty-split-moe-2-uni
+
+beauty-split-moe-3-uni:
+    <<: *default
+    dataset_id: beauty-split-moe-3-uni
+
+beauty-split-moe-4-uni:
+    <<: *default
+    dataset_id: beauty-split-moe-4-uni
+
+beauty-split-moe-5-uni:
+    <<: *default
+    dataset_id: beauty-split-moe-5-uni
+
+beauty-split-moe-6-uni:
+    <<: *default
+    dataset_id: beauty-split-moe-6-uni
+
+beauty-split-moe-7-uni:
+    <<: *default
+    dataset_id: beauty-split-moe-7-uni
+
+# me
+beauty-split-me-1:
+    <<: *default
+    dataset_id: beauty-split-me-1
+
+beauty-split-me-2:
+    <<: *default
+    dataset_id: beauty-split-me-2
+
+beauty-split-me-3:
+    <<: *default
+    dataset_id: beauty-split-me-3
+
+beauty-split-me-4:
+    <<: *default
+    dataset_id: beauty-split-me-4
+
+beauty-split-me-5:
+    <<: *default
+    dataset_id: beauty-split-me-5
+
+beauty-split-me-6:
+    <<: *default
+    dataset_id: beauty-split-me-6
+
+beauty-split-me-7:
+    <<: *default
+    dataset_id: beauty-split-me-7

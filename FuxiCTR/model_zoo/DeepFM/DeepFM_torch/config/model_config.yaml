@@ -1,0 +1,283 @@
+toys-split-default: &default
+    batch_norm: true
+    debug_mode: false
+    batch_size: 8192
+    early_stop_patience: 1
+    embedding_dim: 64
+    embedding_regularizer: 0
+    epochs: 100
+    eval_interval: 1
+    feature_specs: null
+    # group_id: user_id
+    hidden_activations: relu
+    learning_rate: 0.001
+    hidden_units: [512, 256, 128]
+    loss: binary_crossentropy
+    metrics: [AUC, logloss]
+    model: DeepFM
+    model_id: DeepFM_base
+    model_root: ./checkpoints
+    monitor: {AUC: 1}
+    monitor_mode: max
+    net_dropout: 0.2
+    net_regularizer: 0
+    num_workers: 16
+    optimizer: adam
+    ordered_features: null
+    pickle_feature_encoder: true
+    save_best_only: true
+    seed: 1027
+    shuffle: true
+    task: binary_classification
+    verbose: 1
+    mix_dim: 32
+
+split-ui:
+    <<: *default
+    dataset_id: split-ui
+  
+split:
+    <<: *default
+    dataset_id: split 
+
+
+# base
+split-base:
+    <<: *default
+    dataset_id: split-base
+    
+# moe
+split-moe-1:
+    <<: *default
+    dataset_id: split-moe-1
+
+split-moe-2:
+    <<: *default
+    dataset_id: split-moe-2
+
+split-moe-3:
+    <<: *default
+    dataset_id: split-moe-3
+
+split-moe-4:
+    <<: *default
+    dataset_id: split-moe-4
+
+split-moe-5:
+    <<: *default
+    dataset_id: split-moe-5
+
+split-moe-6:
+    <<: *default
+    dataset_id: split-moe-6
+
+split-moe-7:
+    <<: *default
+    dataset_id: split-moe-7
+
+# noise
+split-moe-1-noise:
+    <<: *default
+    dataset_id: split-moe-1-noise
+
+split-moe-2-noise:
+    <<: *default
+    dataset_id: split-moe-2-noise
+
+split-moe-3-noise:
+    <<: *default
+    dataset_id: split-moe-3-noise
+
+split-moe-4-noise:
+    <<: *default
+    dataset_id: split-moe-4-noise
+
+split-moe-5-noise:
+    <<: *default
+    dataset_id: split-moe-5-noise
+
+split-moe-6-noise:
+    <<: *default
+    dataset_id: split-moe-6-noise
+
+split-moe-7-noise:
+    <<: *default
+    dataset_id: split-moe-7-noise
+
+
+# rq
+split-rq-1:
+    <<: *default
+    dataset_id: split-rq-1
+
+split-rq-2:
+    <<: *default
+    dataset_id: split-rq-2
+
+split-rq-3:
+    <<: *default
+    dataset_id: split-rq-3
+
+split-rq-4:
+    <<: *default
+    dataset_id: split-rq-4
+
+split-rq-5:
+    <<: *default
+    dataset_id: split-rq-5
+
+split-rq-6:
+    <<: *default
+    dataset_id: split-rq-6
+
+split-rq-7:
+    <<: *default
+    dataset_id: split-rq-7
+
+
+# seq
+split-rq-1-seq:
+    <<: *default
+    dataset_id: split-rq-1-seq
+
+split-rq-2-seq:
+    <<: *default
+    dataset_id: split-rq-2-seq
+
+split-rq-3-seq:
+    <<: *default
+    dataset_id: split-rq-3-seq
+
+split-rq-4-seq:
+    <<: *default
+    dataset_id: split-rq-4-seq
+
+split-rq-5-seq:
+    <<: *default
+    dataset_id: split-rq-5-seq
+
+split-rq-6-seq:
+    <<: *default
+    dataset_id: split-rq-6-seq
+
+split-rq-7-seq:
+    <<: *default
+    dataset_id: split-rq-7-seq
+
+# uni
+split-rq-1-uni:
+    <<: *default
+    dataset_id: split-rq-1-uni
+
+split-rq-2-uni:
+    <<: *default
+    dataset_id: split-rq-2-uni
+
+split-rq-3-uni:
+    <<: *default
+    dataset_id: split-rq-3-uni
+
+split-rq-4-uni:
+    <<: *default
+    dataset_id: split-rq-4-uni
+
+split-rq-5-uni:
+    <<: *default
+    dataset_id: split-rq-5-uni
+
+split-rq-6-uni:
+    <<: *default
+    dataset_id: split-rq-6-uni
+
+split-rq-7-uni:
+    <<: *default
+    dataset_id: split-rq-7-uni
+
+
+# moe-seq
+split-moe-1-seq:
+    <<: *default
+    dataset_id: split-moe-1-seq
+
+split-moe-2-seq:
+    <<: *default
+    dataset_id: split-moe-2-seq
+
+split-moe-3-seq:
+    <<: *default
+    dataset_id: split-moe-3-seq
+
+split-moe-4-seq:
+    <<: *default
+    dataset_id: split-moe-4-seq
+
+split-moe-5-seq:
+    <<: *default
+    dataset_id: split-moe-5-seq
+
+split-moe-6-seq:
+    <<: *default
+    dataset_id: split-moe-6-seq
+
+split-moe-7-seq:
+    <<: *default
+    dataset_id: split-moe-7-seq
+
+
+# moe-uni
+split-moe-1-uni:
+    <<: *default
+    dataset_id: split-moe-1-uni
+
+split-moe-2-uni:
+    <<: *default
+    dataset_id: split-moe-2-uni
+
+split-moe-3-uni:
+    <<: *default
+    dataset_id: split-moe-3-uni
+
+split-moe-4-uni:
+    <<: *default
+    dataset_id: split-moe-4-uni
+
+split-moe-5-uni:
+    <<: *default
+    dataset_id: split-moe-5-uni
+
+split-moe-6-uni:
+    <<: *default
+    dataset_id: split-moe-6-uni
+
+split-moe-7-uni:
+    <<: *default
+    dataset_id: split-moe-7-uni
+
+# me
+split-me-1:
+    <<: *default
+    dataset_id: split-me-1
+
+split-me-2:
+    <<: *default
+    dataset_id: split-me-2
+
+split-me-3:
+    <<: *default
+    dataset_id: split-me-3
+
+split-me-4:
+    <<: *default
+    dataset_id: split-me-4
+
+split-me-5:
+    <<: *default
+    dataset_id: split-me-5
+
+split-me-6:
+    <<: *default
+    dataset_id: split-me-6
+
+split-me-7:
+    <<: *default
+    dataset_id: split-me-7

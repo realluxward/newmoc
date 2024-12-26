@@ -1,0 +1,172 @@
+split-base:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/test.csv
+
+split-moe-1:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_1, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-1/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-1/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-1/test.csv
+
+split-moe-3:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_1, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_2, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_3, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-3/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-3/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-3/test.csv
+
+split-moe-7:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_1, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_2, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_3, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_4, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_5, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_6, type: categorical}
+    - {active: true, dtype: float, name: moe_cid_7, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-7/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-7/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-moe-7/test.csv
+
+split-rq-1:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_1, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-1/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-1/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-1/test.csv
+
+split-rq-3:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_1, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_2, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_3, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-3/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-3/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-3/test.csv
+
+split-rq-7:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_1, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_2, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_3, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_4, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_5, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_6, type: categorical}
+    - {active: true, dtype: float, name: rq_cid_7, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-7/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-7/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-rq-7/test.csv
+
+split-me-1:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: me_cid_1, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/test.csv
+
+split-me-3:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: me_cid_1, type: categorical}
+    - {active: true, dtype: float, name: me_cid_2, type: categorical}
+    - {active: true, dtype: float, name: me_cid_3, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/test.csv
+
+split-me-7:
+    data_format: csv
+    data_root: ../data/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    - {active: true, dtype: float, name: me_cid_1, type: categorical}
+    - {active: true, dtype: float, name: me_cid_2, type: categorical}
+    - {active: true, dtype: float, name: me_cid_3, type: categorical}
+    - {active: true, dtype: float, name: me_cid_4, type: categorical}
+    - {active: true, dtype: float, name: me_cid_5, type: categorical}
+    - {active: true, dtype: float, name: me_cid_6, type: categorical}
+    - {active: true, dtype: float, name: me_cid_7, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-me/test.csv
