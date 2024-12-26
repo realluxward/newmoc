@@ -14,3 +14,5 @@ data/
 /vq/script/beauty/
 *.tar.gz
 cluster/
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
