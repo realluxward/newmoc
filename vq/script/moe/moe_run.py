@@ -35,28 +35,14 @@ class VQExpert(nn.Module):
     def __init__(self, in_feat, hidden, out_feat):
         super().__init__()
         self.vq = VectorQuantize(dim=hidden, codebook_dim=32, codebook_size = num_codes, kmeans_init=True, commitment_weight=0)
-        # self.vq = ResidualVQ(dim=hidden, codebook_dim=32, num_quantizers = num_quantizers, codebook_size = num_codes, kmeans_init=True, commitment_weight=0)
         self.down = nn.Linear(in_feat, hidden)
         self.up = nn.Linear(hidden, out_feat)
-        # self.rs_up = nn.Sequential(
-        #     *[
-        #         nn.Linear(64, 64),
-        #         nn.ReLU(),
-        #         nn.Linear(64, 64),
-        #     ]
-        # )
-
         return
 
     def forward(self, x, rs_x=None):
-        # rs_x = self.rs_up(rs_x)
-        # x = torch.cat([x, rs_x], dim=1)
         x = self.down(x)
         x, indices, commit_loss = self.vq(x)
         x = self.up(x)
-
-        # indices = indices[:, 0]
-
         return x.clamp(-1, 1), indices, commit_loss
     
 
@@ -76,7 +62,6 @@ class SimpleVQVAE(nn.Module):
         )
         self.vq = nn.ModuleList(
             [VQExpert(in_feat=128, hidden=128, out_feat=128) for i in range(expert_nums)]
-            # [ResidualVQ(dim=64, codebook_dim=32, num_quantizers = num_quantizers, codebook_size = num_codes, kmeans_init=True, commitment_weight=0) for _ in range(expert_nums)]
         )
         self.llm_up = nn.Sequential(
             *[
@@ -104,52 +89,23 @@ class SimpleVQVAE(nn.Module):
             ]
         )
         self.rs_emb = nn.Embedding(1000, 128)
-        # self.gating = nn.Sequential(*[
-        #     nn.Linear(128, expert_nums),
-        #     # nn.Linear(expert_nums, expert_nums//2, bias=False),
-        #     # nn.ReLU(),
-        #     # nn.Linear(expert_nums//2, expert_nums, bias=False),
-        #     nn.Softplus()
-        #     # nn.Softmax(dim=-1)
-        #     # nn.Sigmoid()
-        #     # nn.Tanh()
-        # ])
         return
 
     def forward(self, x):
-        # down
         x = self.llm_down(x)
-        # rs_emb = self.rs_emb(rs_x)
-        # rs_x = self.rs_down(rs_emb)
-        
-        # vq
-        # x = torch.cat([rs_x, x], dim=1)
         moe_x = []
         indices = []
         commit_loss = 0
-        # commit_loss += (x - rs_emb).abs().mean()
         for i in range(expert_nums):
-            # var = torch.var(x)
-            # noise = torch.randn(x.shape).to(device)
-            # noise *= torch.sqrt(var)
-            # x_i = x + noise
             x_i = x
             x_i, indices_i, commit_loss_i = self.vq[i](x_i)
             moe_x.append(x_i)
             indices.append(indices_i)
             commit_loss += commit_loss_i
         moe_x = torch.stack(moe_x, dim=1)
-        # gate_weight = self.gating(x)
-        # x = torch.mean(moe_x, dim=1)
-        # x = ((moe_x).mean(dim=1) + (moe_x * gate_weight.unsqueeze(-1)).mean(dim=1)) / 2
         x = (moe_x).mean(dim=1)
-        # bs, expert_num
         indices = torch.stack(indices, dim=1)
-
-        # up
-        rs_x = self.rs_up(x)
         x = self.llm_up(x)
-
         return x.clamp(-1, 1), indices, commit_loss
 
 
