@@ -1,8 +1,8 @@
-toys-split-default: &default
+base: &default
     batch_norm: true
     debug_mode: false
     batch_size: 8192
-    early_stop_patience: 1
+    early_stop_patience: 3
     embedding_dim: 64
     embedding_regularizer: 0
     epochs: 100

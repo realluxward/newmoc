@@ -1,8 +1,7 @@
 # 忽略日志文件
 *.log
-
+dataset/
 fxtemp/
-dataset/**/*cold*
 data/
 /FuxiCTR/data
 /FuxiCTR/model_zoo/**/data/
@@ -12,8 +11,10 @@ data/
 /vq/script/sports/
 /vq/script/bole_data/
 /vq/script/beauty/
+**/*_experiments/
 *.tar.gz
 cluster/
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
 amazon*/
+**/.vscode/

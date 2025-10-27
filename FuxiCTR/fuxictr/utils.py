@@ -22,6 +22,7 @@ import glob
 import json
 from collections import OrderedDict
 import h5py
+import sys
 
 
 def load_config(config_dir, experiment_id):
@@ -66,14 +67,25 @@ def load_dataset_config(config_dir, dataset_id):
                 return params
     raise RuntimeError(f'dataset_id={dataset_id} is not found in config.')
 
+def check_log_file(log_file_path, search_string):
+    """检查日志文件中是否包含特定字符串"""
+    if os.path.exists(log_file_path):
+        with open(log_file_path, 'r') as log_file:
+            for line in log_file:
+                if search_string in line:
+                    return True
+    return False
+
 def set_logger(params):
     dataset_id = params['dataset_id']
-    model_id = params.get('model_id', '')
+    exp_id = params.get('expid', '')
     log_dir = os.path.join(params.get('model_root', './checkpoints'), dataset_id)
-    seed = params['seed']
-    log_dir = os.path.join(log_dir, f"seed_{seed}")
     os.makedirs(log_dir, exist_ok=True)
-    log_file = os.path.join(log_dir, model_id + '.log')
+    log_file = os.path.join(log_dir, exp_id +".log")
+
+    if check_log_file(log_file, "Loading test data done."):
+        print(f"Experiment {exp_id} already completed. Skipping...")
+        sys.exit(0)
 
     # logs will not show in the file without the two lines.
     for handler in logging.root.handlers[:]: 

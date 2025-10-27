@@ -19,6 +19,7 @@ from torch import nn
 from fuxictr.pytorch.models import BaseModel
 from fuxictr.pytorch.layers import FeatureEmbedding, MLP_Block, CrossNetV2, CrossNetMix
 from IPython import embed
+import h5py
 
 class DCNv2(BaseModel):
     def __init__(self, 
@@ -38,7 +39,10 @@ class DCNv2(BaseModel):
                  net_dropout=0, 
                  batch_norm=False, 
                  embedding_regularizer=None,
-                 net_regularizer=None, 
+                 net_regularizer=None,
+                 use_index_emb=False,  # 是否使用index embedding
+                 index_file_path=None,  # index文件路径
+                 codebook_size=256, 
                  **kwargs):
         super(DCNv2, self).__init__(feature_map, 
                                     model_id=model_id, 
@@ -47,14 +51,34 @@ class DCNv2(BaseModel):
                                     net_regularizer=net_regularizer,
                                     **kwargs)
         self.embedding_layer = FeatureEmbedding(feature_map, embedding_dim)
-        self.extend_num = 0
-        extend_embedding_layers = []
-        for i in range(self.extend_num):
-            extend_embedding_layers.append(FeatureEmbedding(feature_map, embedding_dim))
-        self.extend_embedding_layers = nn.ModuleList(*[extend_embedding_layers])
+        # 给预训练的id设置新的emb层
+        self.use_index_emb = use_index_emb
+        self.embedding_dim = embedding_dim
+        if self.use_index_emb:
+            assert index_file_path is not None, "需要提供index_file_path"
+            
+            # 读取index
+            index_data = torch.load(index_file_path)  # [n] or [n, num_indices]
+            if index_data.dim() == 1:
+                index_data = index_data.unsqueeze(1)
+
+            num_indices = index_data.shape[1]
+            self.num_indices = num_indices
+            self.codebook_size = codebook_size
+            self.register_buffer('index_data', index_data)
+        
+            # 创建embedding层（vocab_size = codebook_size）
+            self.index_embedding_layers = nn.ModuleList([
+                nn.Embedding(codebook_size, embedding_dim)
+                for _ in range(num_indices)
+            ])
+            
+
         input_dim = feature_map.sum_emb_out_dim()
-        input_dim += self.extend_num * 64
-        # input_dim *= 2
+        # input_dim -= self.embedding_dim # 为了去掉item_position列
+        if self.use_index_emb:
+            input_dim += self.num_indices * embedding_dim
+
         if use_low_rank_mixture:
             self.crossnet = CrossNetMix(input_dim, num_cross_layers, low_rank=low_rank, num_experts=num_experts)
         else:
@@ -120,10 +144,15 @@ class DCNv2(BaseModel):
         self.model_to_device()
 
     def forward(self, inputs):
-        X = self.get_inputs(inputs)
-        feature_emb = self.embedding_layer(X, dynamic_emb_dim=True)
+        X = self.get_inputs(inputs) 
+        if self.use_index_emb:
+            # 从输入中获取original_item_id（h5行号）
+            item_positions = X['item_id'].long()  # [batch_size]
+            index_embs = self._get_index_embeddings(item_positions)
+        feature_emb = self.embedding_layer(X, feature_type='categorical', dynamic_emb_dim=True)
         flat_feature_emb = feature_emb.flatten(start_dim=1)
-
+        if self.use_index_emb:
+            flat_feature_emb = torch.cat([flat_feature_emb, index_embs], dim=1)
         if self.mix:
             bs = feature_emb.shape[0]
             feature_emb = feature_emb.reshape(bs, -1, 64)
@@ -144,44 +173,14 @@ class DCNv2(BaseModel):
         y_pred = self.output_activation(y_pred)
         return_dict = {"y_pred": y_pred}
         return return_dict
-
-    def get_emb(self, inputs, dump_keys):
-        X = self.get_inputs(inputs)
-        feature_emb_dict = self.embedding_layer.get_emb_dict(X, dynamic_emb_dim=True)
-        result_dict = {}
-        for k in feature_emb_dict.keys():
-            result_dict[k] = feature_emb_dict[k]
-        for i in range(self.extend_num):
-            extend_feature_emb_dict = self.extend_embedding_layers[i].get_emb_dict(X, dynamic_emb_dim=True)
-            for k in dump_keys:
-                if 'moe' in k:
-                    result_dict[k] = torch.cat([result_dict[k], extend_feature_emb_dict[k]], dim=1)
-        return result_dict
     
-    def get_layer_emb(self, inputs):
-        X = self.get_inputs(inputs)
-        feature_emb = self.embedding_layer(X, dynamic_emb_dim=True)
-        flat_feature_emb = feature_emb.flatten(start_dim=1)
-        if self.mix:
-            bs = feature_emb.shape[0]
-            feature_emb = feature_emb.reshape(bs, -1, 64)
-            flat_feature_emb = flat_feature_emb + self.gating(flat_feature_emb)
-        all_cat_emb = flat_feature_emb[:, 5*64:]
-        item_cat_emb = torch.cat([flat_feature_emb[:, 1*64:2*64], all_cat_emb], dim=1)
-        
-
-        cross_result_dict = self.crossnet.get_layer_emb(flat_feature_emb)
-        dnn_result_dict = self.parallel_dnn.get_layer_emb(flat_feature_emb)
-
-        cross_out = self.crossnet(flat_feature_emb)
-        dnn_out = self.parallel_dnn(flat_feature_emb)
-
-        final_out = torch.cat([cross_out, dnn_out], dim=-1)
-        # final_out = self.norm(final_out)
-        # final_out = cross_out
-        y_pred = self.fc(final_out)
-        final_result_dict = {"flat": flat_feature_emb, "final": final_out, "pred":y_pred, "all_cat":all_cat_emb, "item_cat": item_cat_emb}
-
-        result_dict = cross_result_dict | dnn_result_dict | final_result_dict
-        return result_dict
+    def _get_index_embeddings(self, item_positions):
+        indices = self.index_data[item_positions.long()]  # [batch_size, num_indices]
+        index_embs_list = []
+        for i in range(self.num_indices):
+            idx_i = indices[:, i]  # [batch_size]，取第i个index
+            emb_i = self.index_embedding_layers[i](idx_i)  # [batch_size, embedding_dim]
+            index_embs_list.append(emb_i)
+        index_embs = torch.cat(index_embs_list, dim=1)  # [batch_size, num_indices * embedding_dim]
+        return index_embs
     
