@@ -20,7 +20,7 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 import sys
 sys.path.insert(0, '/data2/wangzhongren/taolin_project/FuxiCTR/')
 import logging
-import fuxictr_version
+# import fuxictr_version
 from fuxictr import datasets
 from datetime import datetime
 from fuxictr.utils import load_config, set_logger, print_to_json, print_to_list
@@ -48,10 +48,9 @@ if __name__ == '__main__':
     ''' Usage: python run_expid.py --config {config_dir} --expid {experiment_id} --gpu {gpu_device_id}
     '''
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str, default='./config/', help='The config directory.')
+    parser.add_argument('--config', type=str, default='./yaml_moc_1115_top3_contrast/toys_moc_scala3_seed1027_lr0.001_decor100.0_mask4.yaml', help='The config directory.')
     parser.add_argument('--gpu', type=int, default=-1, help='The gpu index, -1 for cpu')
     args = vars(parser.parse_args())
-    
     params = load_yaml_config(args['config'])
     params['gpu'] = args['gpu']
 

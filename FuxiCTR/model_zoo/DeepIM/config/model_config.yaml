@@ -1,4 +1,4 @@
-toys-split-default: &default
+base: &default
     batch_size: 8192
     data_block_size: -1
     debug: false

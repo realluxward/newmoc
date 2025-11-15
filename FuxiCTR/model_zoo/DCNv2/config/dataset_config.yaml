@@ -12,6 +12,31 @@ base:
     train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/train.csv
     valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/test.csv
 
+newbase:
+    data_format: csv
+    data_root: ../data1/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: item_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/test.csv
+
+newbase1:
+    data_format: csv
+    data_root: ../data2/
+    feature_cols:
+    - {active: true, dtype: float, name: user_id, type: categorical}
+    - {active: true, dtype: float, name: sales_type, type: categorical}
+    - {active: true, dtype: float, name: brand, type: categorical}
+    - {active: true, dtype: float, name: categories, type: categorical}
+    label_col: {dtype: float, name: label}
+    test_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/test.csv
+    train_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/train.csv
+    valid_data: /data2/wangzhongren/taolin_project/FuxiCTR/data/toys-split-base/test.csv
+
 split-moe-1:
     data_format: csv
     data_root: ../data/

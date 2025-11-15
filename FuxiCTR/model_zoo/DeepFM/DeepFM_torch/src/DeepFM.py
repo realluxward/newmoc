@@ -18,6 +18,7 @@ import torch
 from torch import nn
 from fuxictr.pytorch.models import BaseModel
 from fuxictr.pytorch.layers import FeatureEmbedding, MLP_Block, FactorizationMachine
+from fuxictr.pytorch.torch_utils import get_initializer
 from IPython import embed
 import logging
 import torch.nn.functional as F
@@ -67,6 +68,9 @@ class DeepFM(BaseModel):
                 nn.Embedding(codebook_size, embedding_dim)
                 for _ in range(num_indices)
             ])
+            for index_emb_layer in self.index_embedding_layers:
+                embedding_initializer = get_initializer("partial(nn.init.normal_, std=1e-4)")
+                embedding_initializer(index_emb_layer.weight)
         mlp_input_dim = feature_map.sum_emb_out_dim()
         logging.info(f"Initial MLP input dim: {mlp_input_dim}")
         # 假设item_position的embedding不进入MLP，与DCNv2逻辑保持一致
@@ -85,14 +89,13 @@ class DeepFM(BaseModel):
         self.mix = False
         # self.mix = True
         if self.mix:
-            mix_dim = kwargs['mix_dim']
-            input_dim = feature_map.sum_emb_out_dim()
+            input_dim_for_mix = mlp_input_dim 
             self.prefix = "base"
             self.gating = nn.Sequential(
                 *[
-                    nn.Linear(input_dim, 4),
+                    nn.Linear(input_dim_for_mix, 4), # 使用修正后的维度
                     nn.GELU(),
-                    nn.Linear(4, input_dim),
+                    nn.Linear(4, input_dim_for_mix), # 使用修正后的维度
                 ]
             )
         else:
@@ -106,29 +109,28 @@ class DeepFM(BaseModel):
         Inputs: [X,y]
         """
         X = self.get_inputs(inputs)
-        feature_emb = self.embedding_layer(X, feature_type='categorical', dynamic_emb_dim=True)
-        # feature_emb = F.normalize(feature_emb, p=2, dim=-1)
-        norm = feature_emb.norm(p=2, dim=1, keepdim=True) + 1e-8  # 防止除零
-        feature_emb = 0.002 * feature_emb / norm
-
-        y_pred = self.fm(X, feature_emb)
-        flat_feature_emb = feature_emb.flatten(start_dim=1)
-        
-        # 【修改】如果使用index embedding，则进行查找和拼接
+        feature_emb = self.embedding_layer(X, feature_type='categorical', dynamic_emb_dim=False)
+        # 在交叉层就引入这些index embedding
+        combined_feature_emb = feature_emb
         if self.use_index_emb:
-            # 从输入中获取original_item_id（h5行号）
-            item_positions = X['item_id'].long()  # [batch_size]
-            index_embs = self._get_index_embeddings(item_positions)
-            # 将index embeddings拼接到扁平化的特征后面
-            flat_feature_emb = torch.cat([flat_feature_emb, index_embs], dim=1)
+            # 2. 获取index embedding，并塑造成 [B, num_indices, D] 的形状
+            batch_raw_itemid = X['item_id'].long() - 1
+            index_embs = self._get_index_embeddings(batch_raw_itemid) # [B, num_indices, D]
+            combined_feature_emb = torch.cat([feature_emb, index_embs], dim=1)
+
+        # norm = combined_feature_emb.norm(p=2, dim=-1, keepdim=True) + 1e-8  # 防止除零
+        # combined_feature_emb = 0.002 * combined_feature_emb / norm
+
+        y_pred = self.fm(X, combined_feature_emb)
+        flat_feature_emb = combined_feature_emb.flatten(start_dim=1)
+
         if self.mix:
-            flat_feature_emb = feature_emb.flatten(start_dim=1)
             flat_feature_emb = flat_feature_emb + self.gating(flat_feature_emb)
             bs = feature_emb.shape[0]
             # feature_emb = feature_emb.reshape(bs, -1, 64)
             feature_emb = flat_feature_emb.reshape(bs, -1, 64)
         
-        y_pred += self.mlp(flat_feature_emb.flatten(start_dim=1))
+        y_pred += self.mlp(flat_feature_emb)
         y_pred = self.output_activation(y_pred)
         return_dict = {"y_pred": y_pred}
         return return_dict
@@ -147,17 +149,15 @@ class DeepFM(BaseModel):
         # embed()
         return result_dict
     
-    def _get_index_embeddings(self, item_positions):
-        indices = self.index_data[item_positions.long()]  # [batch_size, num_indices]
+    def _get_index_embeddings(self, batch_raw_itemid):
         index_embs_list = []
-        for i in range(self.num_indices):
-            idx_i = indices[:, i]  # [batch_size]，取第i个index
-            emb_i = self.index_embedding_layers[i](idx_i)  # [batch_size, embedding_dim]
+        for sid_level in range(self.num_indices):
+            batch_item_sid = self.index_data[batch_raw_itemid.long(), sid_level]  # [batch_size]，取第i个index
+            emb_i = self.index_embedding_layers[sid_level](batch_item_sid)  # [batch_size, embedding_dim]
             index_embs_list.append(emb_i)
-        index_embs = torch.cat(index_embs_list, dim=1)  # [batch_size, num_indices * embedding_dim]
+        # index_embs = torch.cat(index_embs_list, dim=1)  # [batch_size, num_indices * embedding_dim] 原版的
+        index_embs = torch.stack(index_embs_list, dim=1)  # [B, num_indices, D] 新版的，加到交叉层的做法
         return index_embs
-    
-    import torch
 
     def get_inputs_dump(self, inputs, feature_source=None):
         if feature_source and type(feature_source) == str:

@@ -1,5 +1,3 @@
-
-
 import os
 import sys
 import yaml
@@ -41,19 +39,22 @@ def run_single_experiment_worker(args):
     Accepts a tuple (config_path, gpu_id) as its single argument.
     """
     config_path, gpu_id = args  # 解包参数
+        
+    # 使用传入的 gpu_id，而不是硬编码的 0
     run_experiment(config_path, gpu_id)
 
 def main():
     base_config_dir = './config'
-    output_dir = './yaml_moc_1025_experiments'
+    grp_name = 'moc_1107_woreg'
+    output_dir = f'./yaml_{grp_name}'
     os.makedirs(output_dir, exist_ok=True)
 
     expid = 'base'
     base_config = load_config(base_config_dir, expid)
 
     for seed in [20,201,1027,2024,2333][:3]:
-        for lr in [0.001,0.005,0.01]:
-            for dataset in ['beauty','sports','toys'][1:2]:
+        for lr in [0.001,0.005]:
+            for dataset in ['beauty','sports','toys']:
                 for method in ['base','me', 'moc', 'rq'][1:]:
                     for scala in [0,1,3,7][1:]:
                         base_dataset_path = f'/data2/wangzhongren/taolin_project/data/{dataset}-split/base_dataset'
@@ -61,25 +62,29 @@ def main():
                         test_path = os.path.join(base_dataset_path, 'test.csv')
                         valid_path = os.path.join(base_dataset_path, 'valid.csv')
                         index_file_path = f'/data2/wangzhongren/taolin_project/dataset/{dataset}-split/{method}_cbsize256_cbdim32_scala{scala}_epoch500_index.pt'
+                        # index_file_path = f'/data2/wangzhongren/taolin_project/dataset/{dataset}-split-taolin/moe_256_{scala}_index.pt'
                         config = base_config.copy()
                         config.update({ #'cov_weight': cov_weight,
                                         'train_data': train_path,
                                         'test_data': test_path,
                                         'valid_data': valid_path,
                                         'seed': seed,
-                                        'model_root': 'moc_1025_experiments',
+                                        'model_root': grp_name,
                                         'dataset_id': dataset,
-                                        'batch_size': 10000, #4096
+                                        'net_dropout': 0.2,
+                                        'batch_size': 8192, # 10000, #4096
+                                        'embedding_regularizer': 0,
                                         'learning_rate':lr,
                                         'use_index_emb': True,
                                         'index_file_path': index_file_path,
+                                        'mix': 0
                                     })
                         config['expid'] = f"{dataset}_{method}_scala{scala}_seed{seed}_lr{lr}" 
                         save_config(config, output_dir, config['expid'])
     config_files = [os.path.join(output_dir, f) for f in os.listdir(output_dir) if f.endswith('.yaml')]
 
     NUM_GPUS = 8
-    NUM_PROCESSES = 16
+    NUM_PROCESSES = 24
 
     job_args = []
     for i, config_file in enumerate(config_files):
@@ -116,4 +121,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

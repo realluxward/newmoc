@@ -18,3 +18,7 @@ cluster/
 **/.ipynb_checkpoints/
 amazon*/
 **/.vscode/
+/FuxiCTR/model_zoo/**/yaml_*
+/FuxiCTR/model_zoo/**/moc_*
+/FuxiCTR/model_zoo/**/*base*
+/FuxiCTR/model_zoo/data1

@@ -6,7 +6,7 @@ base: &default
     debug_mode: false
     dnn_activations: relu
     embedding_dim: 64
-    embedding_regularizer: 0
+    embedding_regularizer: 0.000
     epochs: 100
     eval_interval: 1
     # learning_rate: 0.00001
@@ -20,7 +20,7 @@ base: &default
     model_structure: parallel
     monitor: {AUC: 1}
     monitor_mode: max
-    net_dropout: 0.2
+    net_dropout: 0
     net_regularizer: 0
     num_cross_layers: 3
     # num_cross_layers: 2
@@ -38,3 +38,9 @@ base: &default
     task: binary_classification
     use_low_rank_mixture: false
     verbose: 1
+
+newbase:
+    <<: *default
+
+newbase1:
+    <<: *default

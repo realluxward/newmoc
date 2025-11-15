@@ -1,4 +1,4 @@
-split-base:
+base:
     data_format: csv
     data_root: ../data/
     feature_cols:

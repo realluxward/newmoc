@@ -45,7 +45,7 @@ def run_single_experiment_worker(args):
 
 def main():
     base_config_dir = './config'
-    grp_name = 'moc_1115_top3_contrast'
+    grp_name = 'moc_1107_woreg'
     output_dir = f'./yaml_{grp_name}'
     os.makedirs(output_dir, exist_ok=True)
 
@@ -54,37 +54,33 @@ def main():
 
     for seed in [20,201,1027,2024,2333][:3]:
         for lr in [0.001,0.005]:
-            for dataset in ['beauty','sports','toys'][-1:]:
-                for method in ['base','moc','me','rq'][1:2]:
-                    for scala in [0,1,3,7,10,14][2:4]:
-                        for decor in [0,10.0,100.0][2:]:
-                            for mask in [0,3,4][2:]:
-                                base_dataset_path = f'/data2/wangzhongren/taolin_project/data/{dataset}-split/base_dataset'
-                                train_path = os.path.join(base_dataset_path, 'train.csv')
-                                test_path = os.path.join(base_dataset_path, 'test.csv')
-                                valid_path = os.path.join(base_dataset_path, 'valid.csv')
-                                # index_file_path = f'/data2/wangzhongren/taolin_project/dataset/{dataset}-split/{method}_cbsize256_cbdim32_scala{scala}_epoch500_index.pt'
-                                index_file_path = f'/data2/wangzhongren/taolin_project/dataset/{dataset}-split/{method}_cbsize256_cbdim32_scala{scala}_mask{mask}_drop0_beta{decor}_epoch1000_index.pt'
-                                config = base_config.copy()
-                                config.update({ #'cov_weight': cov_weight,
-                                                'train_data': train_path,
-                                                'test_data': test_path,
-                                                'valid_data': valid_path,
-                                                'seed': seed,
-                                                'model_root': grp_name,
-                                                'dataset_id': dataset,
-                                                'net_dropout': 0.2,
-                                                'batch_size': 8192, # 10000, #4096
-                                                'embedding_regularizer': 0.000,
-                                                'learning_rate':lr,
-                                                'use_index_emb': True,
-                                                'index_file_path': index_file_path,
-                                                'mix': 0,
-                                                'use_contrastive_loss': True,
-                                                'lambda_sem': 0.1,
-                                            })
-                                config['expid'] = f"{dataset}_{method}_scala{scala}_seed{seed}_lr{lr}_decor{decor}_mask{mask}" 
-                                save_config(config, output_dir, config['expid'])
+            for dataset in ['beauty','sports','toys']:
+                for method in ['base','me', 'moc', 'rq'][1:]:
+                    for scala in [0,1,3,7][1:]:
+                        base_dataset_path = f'/data2/wangzhongren/taolin_project/data/{dataset}-split/base_dataset'
+                        train_path = os.path.join(base_dataset_path, 'train.csv')
+                        test_path = os.path.join(base_dataset_path, 'test.csv')
+                        valid_path = os.path.join(base_dataset_path, 'valid.csv')
+                        index_file_path = f'/data2/wangzhongren/taolin_project/dataset/{dataset}-split/{method}_cbsize256_cbdim32_scala{scala}_epoch500_index.pt'
+                        # index_file_path = f'/data2/wangzhongren/taolin_project/dataset/{dataset}-split-taolin/moe_256_{scala}_index.pt'
+                        config = base_config.copy()
+                        config.update({ #'cov_weight': cov_weight,
+                                        'train_data': train_path,
+                                        'test_data': test_path,
+                                        'valid_data': valid_path,
+                                        'seed': seed,
+                                        'model_root': grp_name,
+                                        'dataset_id': dataset,
+                                        'net_dropout': 0.1,
+                                        'batch_size': 8192, # 10000, #4096
+                                        'embedding_regularizer': 0,
+                                        'learning_rate':lr,
+                                        'use_index_emb': True,
+                                        'index_file_path': index_file_path,
+                                        'mix': 0
+                                    })
+                        config['expid'] = f"{dataset}_{method}_scala{scala}_seed{seed}_lr{lr}" 
+                        save_config(config, output_dir, config['expid'])
     config_files = [os.path.join(output_dir, f) for f in os.listdir(output_dir) if f.endswith('.yaml')]
 
     NUM_GPUS = 8
